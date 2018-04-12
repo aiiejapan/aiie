@@ -7,22 +7,25 @@ import getters from "./getters"
 export default () => {
   return new Vuex.Store({
     state: {
+      user: null,
       activeType: null,
-      itemsPerPage: 20,
+      itemsPerPage: 10,
       items: {
         /* [id: number]: Item */
       },
       users: {
         /* [id: string]: User */
       },
+      userinput: {
+        title: "",
+        content: "",
+        userdoctype: []
+      },
       lists: {
-        top: [
-          /* number */
-        ],
-        new: [],
-        show: [],
-        ask: [],
-        job: []
+        top: [],
+        music: [],
+        code: [],
+        art: []
       }
     },
     actions,
