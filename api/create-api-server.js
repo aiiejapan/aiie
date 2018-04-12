@@ -1,15 +1,18 @@
 import Firebase from "firebase"
+// Required for side-effects
+require("firebase/firestore")
 import LRU from "lru-cache"
 
-export async function createAPI({ config, version }) {
+export async function createAPI({ config }) {
   let api
   // this piece of code may run multiple times in development mode,
   // so we attach the instantiated API to `process` to avoid duplications
   if (process.__API__) {
     api = process.__API__
   } else {
-    Firebase.initializeApp(config)
-    api = process.__API__ = Firebase.database().ref(version)
+    const fbapp = Firebase.initializeApp(config)
+    const db = fbapp.firestore()
+    api = process.__API__ = db
 
     api.onServer = true
 
@@ -21,10 +24,22 @@ export async function createAPI({ config, version }) {
 
     // cache the latest story ids
     api.cachedIds = {}
-    ;["top", "new", "show", "ask", "job"].forEach(type => {
-      api.child(`${type}stories`).on("value", snapshot => {
-        api.cachedIds[type] = snapshot.val()
-      })
+    ;["top", "music", "code", "art"].forEach(collectionType => {
+      let emptyArr = []
+      api
+        .collection("doc_types")
+        .doc(collectionType)
+        .collection("ids")
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            emptyArr.push(doc.id)
+          })
+          api.cachedIds[collectionType] = emptyArr
+        })
+        .catch(err => {
+          console.log(err)
+        })
     })
   }
   return api
