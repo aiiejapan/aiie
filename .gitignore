@@ -10,3 +10,5 @@ yarn-error.log
 static/manifest*.json
 static/sw.js
 static/workbox-sw*.js*
+
+firebase-sdk-key.json
