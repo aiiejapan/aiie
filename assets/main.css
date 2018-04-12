@@ -1,0 +1,129 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v3.0 | 20180413
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+main, menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, main, menu, nav, section {
+	display: block;
+}
+/* HTML5 hidden-attribute fix for newer browsers */
+*[hidden] {
+    display: none;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* Aiie default styles */
+:root {
+	/* http://www.color-hex.com/color-palette/57915 */
+  --theme-dark: rgba(0, 0, 0, 0.74);
+  --theme-primary: #4900ff;
+	--theme-secondary: #9600ff;
+	--theme-third: #00fff9;
+	--theme-link: #00b8ff;
+	--theme-accent: #ff00c1;
+
+	--app-text: var(--theme-dark);
+	--app-link-text: var(--theme-link);
+}
+
+/* define local system font family */
+@font-face {
+  font-family: system;
+  font-style: normal;
+  font-weight: 300;
+  src: local(".SFNSText-Light"), local(".HelveticaNeueDeskInterface-Light"), local(".LucidaGrandeUI"), local("Ubuntu Light"), local("Segoe UI Light"), local("Roboto-Light"), local("DroidSans"), local("Tahoma");
+}
+
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+  margin: 0;
+}
+html, body {
+	overflow-x: hidden;
+}
+
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+	color: var(--app-text);
+	line-height: 1;
+	font-family: 'system', sans-serif;
+	word-wrap: break-word;
+	background: linear-gradient(to right, #f2f2f2 0%, #ffffff 7);
+}
+
+a {
+	color: var(--app-link-text);
+}
+
+/* app utils */
+.u-block {
+	display: block !important;
+}
+.u-flex-0 {
+	flex: 0 0 auto;
+}
+.u-flex-1 {
+	flex: 1 1 auto;
+}
+.u-full-width {
+	width: 100%!important;
+}
+.u-padding-top20 {
+	padding-top: 20px !important;
+}
+.u-padding-bottom20 {
+	padding-bottom: 20px !important;
+}
+.u-text-center {
+	text-align: center !important;
+}
+.u-flex-right {
+	justify-content: flex-end !important;
+}

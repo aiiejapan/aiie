@@ -1,6 +1,12 @@
-import { fetchUser, fetchItems, fetchIdsByType } from "../api"
+import { fetchUser, fetchItems, fetchIdsByType, publishByType } from "../api"
 
 export default {
+  nuxtServerInit({ commit }, { req }) {
+    if (req.user) {
+      commit("UPDATE_USER_STATE", req.user)
+    }
+  },
+
   // ensure data for rendering given list type
   FETCH_LIST_DATA: ({ commit, dispatch }, { type }) => {
     commit("SET_ACTIVE_TYPE", { type })
@@ -41,5 +47,31 @@ export default {
     return state.users[id]
       ? Promise.resolve(state.users[id])
       : fetchUser(id).then(user => commit("SET_USER", { id, user }))
+  },
+
+  PREFETCH_USER_NEWTHINGS: ({ commit }, { type, userinput }) => {
+    return commit("SET_USER_INPUT", { type, userinput })
+  },
+
+  PUBLISH_USER_NEWTHING: ({ dispatch, getters }) => {
+    return dispatch("PUBLISH_API", {
+      title: getters.userinput.title,
+      uid: getters.user.uid,
+      by: getters.user.name,
+      byAvatar: getters.user.picture,
+      // set only content this time
+      lead: getters.userinputlead,
+      content: getters.userinput.content,
+      score: 0,
+      type: getters.doctype,
+      types: getters.draftdoctypes
+    })
+  },
+
+  PUBLISH_API: ({ commit }, post) => {
+    return publishByType(post).then(() => {
+      console.log("DATA SET SUCCESS")
+      commit("DONE_PUBLISH")
+    })
   }
 }

@@ -1,7 +1,8 @@
-import { initializeApp, database } from "firebase/app"
+import { initializeApp, firestore } from "firebase/app"
+require("firebase/firestore")
 
-export async function createAPI({ config, version }) {
-  await import(/* webpackChunkName: "firebase" */ "firebase/database")
+export async function createAPI({ config }) {
+  await import(/* webpackChunkName: "firebase" */ "firebase/firestore")
   initializeApp(config)
-  return database().ref(version)
+  return firestore()
 }

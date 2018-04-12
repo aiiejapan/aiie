@@ -1,21 +1,20 @@
 <template>
-  <div class="news-view view">
-    <item-list-nav :type="type" :page="page" :max-page="maxPage" />
-    <transition :name="transition" mode="out-in">
-      <div v-if="displayedPage > 0" :key="displayedPage" class="news-list">
-        <transition-group tag="ul" name="item">
-          <item v-for="item in displayedItems" :key="item.id" :item="item" />
-        </transition-group>
-      </div>
-    </transition>
-    <item-list-nav :type="type" :page="page" :max-page="maxPage" />
+  <div :class="{ 'view':type !== 'top' }">
+    <h2 v-if="type !== 'top'" class="section-title u-padding-top20 u-padding-bottom20">
+      Maybe you should {{ whatUserDo(type) }} this {{ type }}
+    </h2>
+    <div v-if="displayedPage > 0" :key="displayedPage">
+      <transition-group tag="div" name="item" class="articles col3-articles">
+        <item v-for="item in displayedItems" :key="item.id" :item="item" />
+      </transition-group>
+      <item-list-nav :type="type" :page="page" :max-page="maxPage" />
+    </div>
   </div>
 </template>
 
 <script>
-import { watchList } from "../api"
-import Item from "./Item.vue"
-import ItemListNav from "./ItemListNav.vue"
+import Item from "./Item"
+import ItemListNav from "./ItemListNav"
 
 export default {
   name: "ItemList",
@@ -57,17 +56,6 @@ export default {
     if (this.$root._isMounted) {
       this.loadItems(this.page)
     }
-    // watch the current list for realtime updates
-    this.unwatchList = await watchList(this.type, ids => {
-      this.$store.commit("SET_LIST", { type: this.type, ids })
-      this.$store.dispatch("ENSURE_ACTIVE_ITEMS").then(() => {
-        this.displayedItems = this.$store.getters.activeItems
-      })
-    })
-  },
-
-  beforeDestroy() {
-    this.unwatchList()
   },
 
   methods: {
@@ -88,57 +76,59 @@ export default {
           this.displayedItems = this.$store.getters.activeItems
           this.$nuxt.$loading.finish()
         })
+    },
+
+    whatUserDo(type) {
+      switch (type) {
+        case "music":
+          return "listen"
+        case "code":
+          return "read"
+        case "art":
+          return "view"
+      }
     }
   }
 }
 </script>
 
-<style lang="stylus">
-.news-list {
-  background-color: #fff;
-  border-radius: 2px;
+<style scoped>
+.view {
+  width: 1000px;
+  margin: 0 auto;
 }
-
-.news-list {
-  margin: 10px 0;
-  width: 100%;
-  transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
+.section-title {
+  font: inherit;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0 20px;
 }
-
-.slide-left-enter, .slide-right-leave-to {
-  opacity: 0;
-  transform: translate(30px, 0);
+.articles {
+  padding: 20px;
+  height: auto;
 }
-
-.slide-left-leave-to, .slide-right-enter {
-  opacity: 0;
-  transform: translate(-30px, 0);
+.col3-articles {
+  display: flex;
+  flex-direction: column;
+  /* display: grid;
+  grid-gap: 20px;
+  grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr; */
 }
-
-.item-move, .item-enter-active, .item-leave-active {
-  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+.article-item {
+  margin-bottom: 10px;
 }
-
-.item-enter {
-  opacity: 0;
-  transform: translate(30px, 0);
+.article-item .article-content .top-article-buttons .author-row {
+  display: flex;
 }
-
-.item-leave-active {
-  position: absolute;
-  opacity: 0;
-  transform: translate(30px, 0);
-}
-
-@media (max-width: 600px) {
-  .news-list {
-    margin: 10px 0;
-  }
+.article-item .article-content .top-article-buttons .author-row i {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+  color: #fff;
+  font-family: "ヒラギノ明朝 Pro W3", "ヒラギノ角ゴシック W3", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
 }
 </style>
