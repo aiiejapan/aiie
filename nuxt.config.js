@@ -11,6 +11,11 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+      // you using Nuxt.js for Vue.s server-side rendering, webpack can be extended as follow
+      // https://goo.gl/m978L6
+      config.node = {
+        fs: "empty"
+      }
       config.resolve.alias["create-api"] = `./create-api-${
         isClient ? "client" : "server"
       }.js`
@@ -18,33 +23,37 @@ module.exports = {
     vendor: ["firebase"]
   },
   head: {
-    titleTemplate: "Nuxt HN | %s",
+    titleTemplate: "aiie | %s",
     meta: [
       {
         property: "og:image",
-        content:
-          "https://user-images.githubusercontent.com/904724/26879447-689b56a8-4b91-11e7-968f-5eea1d6c71b4.png"
+        content: ""
       },
       { property: "twitter:card", content: "summary_large_image" },
       { property: "twitter:site", content: "@nuxt_js" }
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
-      { rel: "dns-prefetch", href: "https://hacker-news.firebaseio.com" }
+      { rel: "dns-prefetch", href: "https://nonoway-6acc1.firebaseio.com" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css?family=Roboto"
+      }
     ]
   },
   loading: {
-    color: "#59cc93"
+    color: "#7572ff"
   },
   loadingIndicator: {
     name: "rectangle-bounce",
     color: "white",
-    background: "#188269"
+    background: "#7572ff"
   },
   manifest: {
-    name: "Nuxt Hacker News",
-    description: "HackerNews clone built with Nuxt.js",
-    theme_color: "#188269"
+    name: "aiie",
+    description:
+      "aiie is a social sharing service for web developers and web designers.",
+    theme_color: "#7572ff"
   },
   modules: ["@nuxtjs/pwa", "@nuxtjs/component-cache"],
   plugins: [
@@ -52,9 +61,12 @@ module.exports = {
     "~/plugins/filters",
     "~/plugins/components"
   ],
+  // https://github.com/PrismJS/prism-themes/blob/master/themes/prism-duotone-sea.css
+  css: ["~/assets/main.css"],
   router: {
     middleware: ["https"]
   },
+  serverMiddleware: ["~/serverMiddleware/authedUserToken"],
   render: {
     static: {
       maxAge: "1y",
